@@ -1,0 +1,35 @@
+{% use "@Contao/component/_figure.html.twig" %}
+
+{% set classes = ['layout_latest'] %}
+{% if archive is defined and archive.id is defined %}
+    {% set classes = classes|merge(['arc_' ~ archive.id]) %}
+{% endif %}
+
+{% set classes = classes|merge(['block col-md-6 col-lg-4 col-xl-3' ~ class]) %}
+
+{% if yearStart %}
+    <h3 class="fs-4 mt-5 mb-3">{{ year }}</h3>
+{% endif %}
+
+<div class="{{ classes|join(' ') }}">
+
+    {% if addImage and picture is defined %}
+    {{ block('figure_component') }}
+    {% endif %}
+
+    {% if headline is defined and headline %}
+    <h3 class="fs-5">{{ headline|raw }}</h3>
+    {% endif %}
+
+    {% if teaser is defined and teaser %}
+    <div class="ce_text block">
+        {{ teaser|csp_inline_styles|insert_tag|encode_email|raw }}
+    </div>    
+    {% endif %}
+
+</div>
+
+{# Add metadata #}
+{% if not hasReader %}
+  {% do add_schema_org(figure.schemaOrgData|default) %}
+{% endif %}
